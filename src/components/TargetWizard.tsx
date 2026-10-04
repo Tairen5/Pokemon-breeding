@@ -161,14 +161,6 @@ export const TargetWizard: React.FC<{ onComplete: () => void }> = ({ onComplete 
 
       {/* ══ LEFT PANEL ══ */}
       <div className="tw-left">
-        <div className="tw-pokeball-watermark" aria-hidden="true">
-          <svg viewBox="0 0 200 200" fill="none">
-            <circle cx="100" cy="100" r="90" stroke="white" strokeWidth="14"/>
-            <line x1="10" y1="100" x2="60" y2="100" stroke="white" strokeWidth="14"/>
-            <line x1="140" y1="100" x2="190" y2="100" stroke="white" strokeWidth="14"/>
-            <circle cx="100" cy="100" r="28" stroke="white" strokeWidth="14"/>
-          </svg>
-        </div>
 
         {/* Title */}
         <div className="tw-title-row">

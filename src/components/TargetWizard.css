@@ -40,17 +40,15 @@
 }
 
 /* Deeper red wedge hugging the diagonal cut — the game's two-tone menu panel.
-   A crisp, solid band like the reference: the gradient starts BEFORE the
-   clip so the feathered inner edge lands inside the visible band (otherwise
-   the band is almost entirely clipped away and reads as a faint tint), and
-   both of its edges stay parallel to the panel's own clip (100% -> 88%).
-   Colour is a deep carmine — still unmistakably red, not the near-black
-   maroon it used to be. */
+   FLAT colour, same as the base: the reference is a hard-edged wedge of one
+   solid red, only a step darker than the base, NOT a near-black maroon and
+   never a gradient (a gradient here reads as a third tone). Both edges stay
+   parallel to the panel's own clip (100% -> 88%). */
 .tw-left::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(100deg, rgba(176, 20, 38, 0) 76%, #b41426 86%, #a81020 100%);
+  background: #c9202f;
   clip-path: polygon(80% 0, 100% 0, 88% 100%, 68% 100%);
   z-index: 0;
 }
@@ -59,18 +57,6 @@
 .tw-left > * {
   position: relative;
   z-index: 1;
-}
-
-/* Faint pokeball watermark in the bottom-left */
-.tw-pokeball-watermark {
-  position: absolute;
-  bottom: -60px;
-  left: -50px;
-  width: 300px;
-  height: 300px;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.12;
 }
 
 /* Title row */
