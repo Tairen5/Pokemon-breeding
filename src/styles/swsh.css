@@ -1,0 +1,304 @@
+/* ═══════════════════════════════════════════════════════════════
+   SWSH DESIGN SYSTEM
+   Reusable building blocks reverse-engineered from the
+   Pokémon Sword & Shield UI (menu, bag, battle, dialogue).
+
+   Imported once in main.tsx. Every component can reuse these
+   classes to look like it came straight out of the game.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Core neutrals ── */
+  --swsh-white:    #fefefe;
+  --swsh-off-white:#f2f2f4;
+  --swsh-black:    #1a1a1a;
+  --swsh-ink:      #212121;
+  --swsh-charcoal: #3a3a3a;   /* notice / toast boxes            */
+  --swsh-gray:     #e0e0e0;
+  --swsh-gray-mid: #b9b9b9;
+
+  /* ── Signature brand colours ── */
+  --swsh-red:       #e3313d;
+  --swsh-deep-red:  #c1272d;
+  --swsh-yellow:    #f2a03d;   /* bag panel                       */
+  --swsh-gold:      #f7c948;
+  --swsh-orange:    #ef5a3c;   /* Pokédex wedge                   */
+  --swsh-blue:      #29abe2;   /* shop panel                      */
+  --swsh-blue-deep: #006ec4;
+  --swsh-green:     #5cc22b;   /* HP bar                          */
+  --swsh-teal:      #169a7e;
+
+  /* ── Geometry ── */
+  --swsh-radius-pill: 999px;
+  --swsh-radius-panel: 22px;
+  --swsh-radius-box: 14px;
+  --swsh-shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.15);
+  --swsh-shadow-panel: 0 10px 26px rgba(0, 0, 0, 0.18);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   1. THE CURSOR  —  the chunky ">" chevron next to the active row
+   ═══════════════════════════════════════════════════════════════ */
+.swsh-cursor {
+  display: inline-block;
+  width: 24px;
+  height: 30px;
+  flex-shrink: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  /* white chevron + black outline (used on dark rows) */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpolyline points='7,3 19,12 7,21' fill='none' stroke='%231a1a1a' stroke-width='10' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cpolyline points='7,3 19,12 7,21' fill='none' stroke='%23ffffff' stroke-width='5' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+/* dark chevron + white outline (used on white/light rows) */
+.swsh-cursor--dark {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpolyline points='7,3 19,12 7,21' fill='none' stroke='%23ffffff' stroke-width='10' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cpolyline points='7,3 19,12 7,21' fill='none' stroke='%231a1a1a' stroke-width='5' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   2. CONTINUE TRIANGLE  —  the small "▼" prompt indicator
+   ═══════════════════════════════════════════════════════════════ */
+.swsh-triangle {
+  display: inline-block;
+  width: 18px;
+  height: 12px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16'%3E%3Cpolygon points='2,2 22,2 12,15' fill='%231a1a1a'/%3E%3C/svg%3E");
+}
+.swsh-triangle--light {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16'%3E%3Cpolygon points='2,2 22,2 12,15' fill='%23ffffff'/%3E%3C/svg%3E");
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   3. SECTION TITLE  —  huge black uppercase heading + line icon
+   ═══════════════════════════════════════════════════════════════ */
+.swsh-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.swsh-title__icon {
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  color: var(--swsh-black);
+}
+.swsh-title__text {
+  font-size: 3.4rem;
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--swsh-black);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   4. CAPSULE ROW  —  the stadium-shaped list entry
+   ═══════════════════════════════════════════════════════════════ */
+.swsh-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--swsh-white);
+  border-radius: var(--swsh-radius-pill);
+  padding: 10px 20px;
+  box-shadow: var(--swsh-shadow-soft);
+  position: relative;
+}
+
+/* ── selected variant: black pill + diagonal coloured tag ── */
+.swsh-row--selected {
+  background: var(--swsh-black);
+  color: #fff;
+  overflow: hidden;
+  padding-right: 0;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.32);
+}
+.swsh-row__tag {
+  align-self: stretch;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  padding: 0 22px 0 26px;
+  background: var(--swsh-yellow);
+  color: #fff;
+  font-weight: 900;
+  /* the signature diagonal junction with the black bar */
+  clip-path: polygon(16px 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   5. NOTICE / TOAST  —  dark rounded box with a ▼ indicator
+   ═══════════════════════════════════════════════════════════════ */
+.swsh-notice {
+  position: relative;
+  background: var(--swsh-charcoal);
+  color: #fff;
+  border-radius: var(--swsh-radius-box);
+  padding: 16px 56px 16px 24px;
+  font-weight: 700;
+  box-shadow: var(--swsh-shadow-soft);
+}
+.swsh-notice::after {
+  content: '';
+  position: absolute;
+  right: 18px;
+  bottom: 12px;
+  width: 16px;
+  height: 11px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16'%3E%3Cpolygon points='2,2 22,2 12,15' fill='%23ffffff'/%3E%3C/svg%3E");
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   6. DIALOGUE BOX  —  white capsule + overlapping black name tag
+   ═══════════════════════════════════════════════════════════════ */
+.swsh-dialog {
+  position: relative;
+  background: var(--swsh-white);
+  border-radius: 34px;
+  padding: 26px 34px;
+  box-shadow: var(--swsh-shadow-panel);
+  color: var(--swsh-ink);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.swsh-dialog__name {
+  position: absolute;
+  top: -18px;
+  left: 26px;
+  background: var(--swsh-charcoal);
+  color: #fff;
+  border-radius: 12px;
+  padding: 6px 30px;
+  font-weight: 900;
+  font-size: 1rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   7. KEY BUTTON  —  white circle with a bold black letter (A/B/X/Y)
+   ═══════════════════════════════════════════════════════════════ */
+.swsh-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--swsh-black);
+  font-weight: 900;
+  font-size: 0.82rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   8. ACTION BAR  —  the black bottom band with button prompts
+   ═══════════════════════════════════════════════════════════════ */
+.swsh-action-bar {
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+  background: linear-gradient(180deg, #232323 0%, #141414 100%);
+  padding: 10px 34px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 26px;
+  box-sizing: border-box;
+}
+/* diagonal wedge rising out of the band on the left, like the game */
+.swsh-action-bar::before {
+  content: '';
+  position: absolute;
+  top: -16px;
+  left: -22px;
+  width: 130px;
+  height: 200%;
+  background: linear-gradient(180deg, #232323 0%, #141414 100%);
+  transform: skewX(-24deg);
+  z-index: 0;
+}
+.swsh-prompt {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-weight: 900;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   9. TAB BAND  —  trapezoid label under the active tab icon
+   ═══════════════════════════════════════════════════════════════ */
+.swsh-tab-band {
+  display: inline-block;
+  padding: 6px 44px;
+  background: var(--swsh-yellow);
+  color: #fff;
+  font-weight: 900;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  clip-path: polygon(12% 0, 100% 0, 88% 100%, 0 100%);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   10. GENERIC CAPSULE BUTTON
+   ═══════════════════════════════════════════════════════════════ */
+.swsh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--swsh-black);
+  color: #fff;
+  border: none;
+  border-radius: var(--swsh-radius-pill);
+  padding: 12px 30px;
+  font-family: 'FOT-UDKakugo', sans-serif;
+  font-weight: 900;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.22);
+  transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+}
+.swsh-btn:hover:not(:disabled) {
+  background: #2b2b2b;
+  transform: translateY(2px);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.22);
+}
+.swsh-btn:disabled {
+  background: var(--swsh-gray-mid);
+  color: #fff;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.swsh-btn--accent {
+  background: var(--swsh-red);
+  color: #fff;
+}
+.swsh-btn--accent:hover:not(:disabled) { background: #d3202e; }
+
+/* ═══════════════════════════════════════════════════════════════
+   11. HUD value chip  —  "YOUR MONEY  ₽ 50,168" style top-right
+   ═══════════════════════════════════════════════════════════════ */
+.swsh-hud {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+.swsh-hud__label { font-size: 0.95rem; }
+.swsh-hud__value { font-size: 1.25rem; }

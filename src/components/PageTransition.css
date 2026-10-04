@@ -1,0 +1,41 @@
+/* Page transition animations */
+@keyframes pageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes swshWipeIn {
+  0% {
+    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+@keyframes swshRedSweep {
+  0%   { transform: translateX(-100%) skewX(-8deg); }
+  45%  { transform: translateX(0%) skewX(-8deg); }
+  55%  { transform: translateX(0%) skewX(-8deg); }
+  100% { transform: translateX(110%) skewX(-8deg); }
+}
+
+.page-enter {
+  animation: pageSlideIn 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* The red diagonal sweep overlay shown on major route transitions */
+.swsh-sweep-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: #cc2b35;
+  animation: swshRedSweep 0.55s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}

@@ -1,0 +1,139 @@
+.top-nav-container {
+  position: relative;
+  width: 100%;
+  height: 94px;
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+.top-nav-bar {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  background-color: #cc2b35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 0 8px;
+}
+
+/* Diagonal white accent — the signature SwSh right edge */
+.top-nav-diagonal-accent {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 100%;
+  background: #e8e8ec;
+  transform-origin: top right;
+  clip-path: polygon(40px 0, 100% 0, 100% 100%, 0 100%);
+  z-index: 1;
+}
+
+/* ── Arrows ── */
+.nav-arrow {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  transition: color 0.15s, transform 0.1s;
+  flex-shrink: 0;
+  z-index: 3;
+}
+
+.nav-arrow:hover {
+  color: white;
+  transform: scale(1.15);
+}
+
+.nav-arrow.disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.nav-arrow.disabled:hover {
+  transform: none;
+}
+
+/* Solid triangles, like the game's < > tab arrows */
+.nav-tri {
+  display: block;
+  width: 20px;
+  height: 26px;
+}
+.nav-tri--left {
+  clip-path: polygon(100% 0, 100% 100%, 0 50%);
+  background: currentColor;
+}
+.nav-tri--right {
+  clip-path: polygon(0 0, 0 100%, 100% 50%);
+  background: currentColor;
+}
+
+/* ── Icon strip ── */
+.nav-icons {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+  z-index: 3;
+  height: 100%;
+  padding-top: 12px;
+}
+
+/* Each icon + optional label band underneath */
+.nav-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav-band {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.7rem;
+  padding: 3px 26px;
+  pointer-events: none;
+}
+
+.nav-icon-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.75);
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.18s ease;
+  position: relative;
+}
+
+.nav-icon-btn:hover {
+  color: white;
+  background: rgba(255,255,255,0.15);
+}
+
+/* Active icon: dark circle background, white icon — like SwSh */
+.nav-icon-btn.active {
+  color: #1a1a1a;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* Pulse animation on the active icon */
+.nav-icon-btn.active svg {
+  filter: drop-shadow(0 0 1px rgba(0,0,0,0.4));
+}

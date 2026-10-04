@@ -1,0 +1,256 @@
+/* Canvas */
+.css-tree {
+  padding: 2rem;
+}
+
+/* ── SwSh pearl blue background panel ── */
+.swsh-tree-panel {
+  position: relative;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.55) 0%, transparent 65%),
+    radial-gradient(ellipse at 20% 80%, rgba(180,210,255,0.3) 0%, transparent 50%),
+    linear-gradient(160deg, #c8d8f0 0%, #b8cbec 30%, #a8c0e8 60%, #b0caf0 100%);
+  overflow: hidden;
+}
+
+/* ── Pokéball pearl background decorations ── */
+.tree-bg-deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* Shine at top — like SwSh panels */
+.tree-bg-shine {
+  position: absolute;
+  top: -40%;
+  left: -10%;
+  width: 120%;
+  height: 60%;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.38) 0%, transparent 70%);
+  border-radius: 0 0 50% 50%;
+}
+
+.tree-bg-pokeball {
+  position: absolute;
+  width: min(520px, 70%);
+  height: min(520px, 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.tree-bg-pokeball-sm {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+}
+
+.tree-bg-sm-1 { top: 4%;   left: 3%;   transform: rotate(-18deg); }
+.tree-bg-sm-2 { bottom: 8%; right: 4%;  transform: rotate(22deg); }
+.tree-bg-sm-3 { top: 55%;  left: 2%;   transform: rotate(8deg); width: 90px; height: 90px; }
+
+/* Dot grid for corner accents */
+.tree-bg-dots {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+}
+.tree-bg-dots-tr { top: 12px; right: 12px; }
+.tree-bg-dots-bl { bottom: 12px; left: 12px; transform: rotate(180deg); }
+
+/* ── Zoom HUD ── */
+.tree-zoom-btn {
+  background: rgba(255,255,255,0.92);
+  border: 2px solid #dde2f0;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  font-size: 1.3rem;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  transition: background 0.15s, transform 0.1s;
+  color: #1a1a2e;
+}
+.tree-zoom-btn:hover { background: white; transform: scale(1.1); }
+.tree-zoom-btn:active { transform: scale(0.95); }
+
+.tree-zoom-label {
+  background: rgba(255,255,255,0.92);
+  border: 2px solid #dde2f0;
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #1a1a2e;
+  min-width: 58px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+
+
+.css-tree ul {
+  padding-top: 40px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding-left: 0;
+}
+
+.css-tree li {
+  float: left;
+  text-align: center;
+  list-style-type: none;
+  position: relative;
+  padding: 40px 10px 0 10px;
+}
+
+/* Connectors */
+.css-tree li::before, .css-tree li::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 50%;
+  border-top: 4px solid var(--swsh-gray);
+  width: 50%;
+  height: 40px;
+}
+
+.css-tree li::after {
+  right: auto;
+  left: 50%;
+  border-left: 4px solid var(--swsh-gray);
+}
+
+.css-tree li:only-child::after, .css-tree li:only-child::before {
+  display: none;
+}
+
+.css-tree li:only-child {
+  padding-top: 0;
+}
+
+.css-tree li:first-child::before, .css-tree li:last-child::after {
+  border: 0 none;
+}
+
+.css-tree li:last-child::before {
+  border-right: 4px solid var(--swsh-gray);
+  border-radius: 0 10px 0 0;
+}
+
+.css-tree li:first-child::after {
+  border-radius: 10px 0 0 0;
+}
+
+.css-tree ul ul::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  border-left: 4px solid var(--swsh-gray);
+  width: 0;
+  height: 40px;
+  margin-left: -2px; /* Center thick border */
+}
+
+/* === INTERACTIVE CHECKLIST MODE === */
+.tree-node {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.tree-node:hover {
+  transform: scale(1.05);
+}
+
+.checkmark-hint {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background-color: #4caf50;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+  font-size: 1.2rem;
+  z-index: 10;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* When a step is marked as completed, show checkmark and paint the lines green! */
+.step-completed .checkmark-hint {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Paint the lines going up from this node to its parent green */
+.css-tree .step-completed::before,
+.css-tree .step-completed::after {
+  border-top-color: #4caf50 !important;
+}
+
+.css-tree .step-completed:last-child::before {
+  border-right-color: #4caf50 !important;
+}
+
+.css-tree .step-completed:first-child::after {
+  border-left-color: #4caf50 !important;
+}
+
+/* PokeMMO Tree Node Styles */
+.poke-mmo-tree .tree-node {
+  display: inline-flex;
+  min-width: 160px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.poke-mmo-tree .completed {
+  border-color: #4caf50;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
+}
+
+.node-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.node-sprite {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.node-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.node-gender {
+  font-weight: 900;
+  font-size: 0.9rem;
+}
+
+

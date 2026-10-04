@@ -1,0 +1,877 @@
+/* ── Root layout: left red panel + right white panel ── */
+.tw-root {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  font-family: 'FOT-UDKakugo', sans-serif;
+  overflow: hidden;
+  /* Light half of the SwSh backdrop: pure white on the left melting into a
+     pale mint-cyan (#e7ffff) at the right edge. Put on the root (instead of
+     the right panel) so the diagonal cut of the red column reveals this same
+     surface and there is no visible seam. */
+  background: linear-gradient(115deg, #ffffff 0%, #f4fdff 45%, #e7ffff 100%);
+}
+
+/* ══════════════════════════════════════
+   LEFT PANEL  (~30% width, two-tone red)
+══════════════════════════════════════ */
+.tw-left {
+  position: relative;
+  z-index: 1;
+  /* Wider than before: this column holds the list of added Pokémon (it can
+     hold several), so the red now takes a real share of the screen like the
+     move list in Sword/Shield instead of a thin 300px strip. */
+  width: clamp(320px, 32vw, 560px);
+  flex-shrink: 0;
+  /* SwSh panel red: a vivid red lit from the top-left, washed by a broad
+     glossy sheen sweeping across the corner — the same language the game uses
+     on its summary / Pokédex / bag panels. */
+  /* Flat SwSh panel red. The reference keeps this surface perfectly flat —
+     no glossy sheen, no light shafts: just the game's own ambient shading. */
+  background: #c42430;
+  clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
+  padding: 2rem 3.5rem 2rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  overflow: hidden;
+}
+
+/* Deeper red wedge hugging the diagonal cut — the game's two-tone menu panel.
+   A crisp, solid band like the reference: only the inner edge is feathered a
+   touch so the seam does not alias, and its edges stay parallel to the
+   panel's clip-path (100% -> 88%). */
+.tw-left::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, rgba(148, 22, 33, 0) 72%, #961621 79%, #8d141e 100%);
+  clip-path: polygon(72% 0, 100% 0, 88% 100%, 60% 100%);
+  z-index: 0;
+}
+
+/* All direct children above the pseudo-element */
+.tw-left > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Faint pokeball watermark in the bottom-left */
+.tw-pokeball-watermark {
+  position: absolute;
+  bottom: -60px;
+  left: -50px;
+  width: 300px;
+  height: 300px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.12;
+}
+
+/* Title row */
+.tw-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.tw-title {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: white;
+  letter-spacing: 1px;
+  /* flat, clean type like the game — just a whisper of shadow for contrast */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+}
+
+.tw-subtitle {
+  margin: -1rem 0 0;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* ── Party list ── */
+.tw-party-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  overflow-y: auto;
+  flex: 1;
+  scrollbar-width: none;
+}
+.tw-party-list::-webkit-scrollbar { display: none; }
+
+/* Party card (inventory Pokémon on the left) */
+.tw-party-card {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0,0,0,0.3);
+  border-radius: 28px;
+  padding: 0.3rem 0.8rem 0.3rem 0.3rem;
+  cursor: default;
+  position: relative;
+}
+
+/* Highlighted target card */
+.tw-party-target {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  border-radius: 30px;
+  padding: 0.3rem 1rem 0.3rem 0.5rem;
+  gap: 0.8rem;
+}
+
+/* Chunky ">" cursor glued to the selected (target) row */
+.tw-target-cursor {
+  position: absolute;
+  left: -32px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 28px;
+}
+
+.tw-party-sprite-wrapper {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tw-party-sprite {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.tw-sprite-shadow {
+  position: absolute;
+  bottom: 0;
+  width: 32px;
+  height: 10px;
+  background: rgba(0,0,0,0.1);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.tw-party-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.tw-party-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tw-party-name {
+  color: white;
+  font-weight: 500;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tw-party-target .tw-party-name { color: #1a1a2e; }
+
+.tw-gender-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 900;
+  line-height: 1;
+}
+.tw-gender-icon.male { background: #3b82f6; }
+.tw-gender-icon.female { background: #cc2b35; }
+
+/* The X button in the corner, if we have it */
+.tw-remove-target {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #cc2b35;
+  border: 2px solid white;
+  color: white;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 0.65rem;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.tw-party-ivs {
+  font-size: 0.8rem;
+  color: #1a1a2e;
+  font-weight: 500;
+  font-family: monospace;
+}
+.tw-party-ivs.perfect { color: #2e7d32; }
+
+/* ══════════════════════════════════════
+   LEFT PANEL — PARTY PILLS
+   The added Pokémon read like the SwSh party screen: a slim white
+   capsule holding just the sprite on its little floor marker, the
+   name on top and the IV spread underneath (exactly where the game
+   prints "Lv. 51").
+
+   Scoped to .tw-left on purpose: BreedingTree reuses the bare
+   .tw-party-card / .tw-party-target / .tw-party-ivs classes for
+   its nodes, and those must keep their own look.
+══════════════════════════════════════ */
+.tw-left .tw-party-card {
+  background: #fff;
+  border-radius: var(--swsh-radius-pill, 999px);
+  gap: 0.5rem;
+  /* flush capsule: no right/top/bottom padding so the dark value chip fills the
+     rounded right end of the pill exactly like the SwSh move rows */
+  padding: 0 0 0 0.14rem;
+  min-height: 0;
+  /* soft drop shadow + the slight bottom lip the game cards have */
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.16), inset 0 -2px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* The row the cursor points at (the chosen target) sits slightly forward */
+.tw-left .tw-party-target {
+  transform: translateX(4px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.26), inset 0 -2px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Staging area for the mon. Small square box.
+   flex-shrink: 0 is important: without it the flex row squashed this box
+   horizontally and the floor marker read as a stretched oval. */
+.tw-left .tw-party-sprite-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  background: none;
+  box-shadow: none;
+}
+
+/* The mon stands on the floor marker: pinned to the bottom centre of the box,
+   just a hair wider than the ball below so it looks planted on it. */
+.tw-left .tw-party-sprite {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  z-index: 1;
+}
+
+/* Poké Ball lying flat on the floor — the game's ground marker: a gently
+   squashed ellipse with shell, equator seam and the centre button. */
+.tw-left .tw-sprite-shadow {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 42px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid #d6d9e1;
+  background:
+    /* centre button */
+    radial-gradient(circle at 50% 50%, #cdd1da 0 1.4px, #ffffff 1.7px 3px, #cdd1da 3.3px 3.9px, transparent 4.1px),
+    /* equator seam */
+    linear-gradient(transparent 0 45%, #d3d7e0 45% 55%, transparent 55% 100%),
+    /* shell */
+    radial-gradient(ellipse at 50% 22%, #ffffff 0 58%, #e9ebf0 100%);
+  z-index: 0;
+}
+
+.tw-left .tw-party-info { gap: 0; }
+
+/* the gender badge and the name sit tight together in the slim pill */
+.tw-left .tw-party-name-row { gap: 6px; }
+.tw-left .tw-gender-icon { width: 14px; height: 14px; font-size: 0.62rem; }
+
+.tw-left .tw-party-name {
+  color: #2f2f2f;
+  font-weight: 700;
+  font-size: 0.85rem;
+  line-height: 1.15;
+}
+
+/* ── Type badge: the game's own type sprite, used as-is — coloured wedge with
+   the type symbol on a white disc, then the name in caps on the dark band
+   (exactly the FIRE / DRAGON badges on the SwSh summary card). ── */
+.tw-left .tw-party-type {
+  display: block;
+  height: 22px;
+  width: auto;
+  flex-shrink: 0;
+  align-self: center;
+  /* cancel the row gap so the tag sits flush against the dark value chip */
+  margin-right: -0.5rem;
+  z-index: 2;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
+}
+
+/* ── Value capsule: the dark rounded segment carrying the IV spread, mirroring
+   where the game prints a move's PP ("5/5"). Straight left edge, and a rounded
+   right end that lines up with the pill's own cap. ── */
+.tw-left .tw-party-value {
+  align-self: stretch;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  padding: 0 0.62rem 0 0.7rem;
+  border-radius: 0 999px 999px 0;
+  background: #2b2b2b;
+  color: #fff;
+  font-family: 'FOT-UDKakugo', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+/* a perfect 31/31/31/31/31/31 spread keeps a gold tint on the dark chip */
+.tw-left .tw-party-value.perfect { color: var(--swsh-gold); }
+
+.tw-empty {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.8rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* ══════════════════════════════════════
+   RIGHT PANEL — SEARCH PHASE
+══════════════════════════════════════ */
+.tw-search-phase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  gap: 1.5rem;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.tw-search-bar-wrapper {
+  width: 100%;
+  max-width: 500px;
+}
+
+.tw-search-pill {
+  width: 100%;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 30px;
+  padding: 0.7rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #1a1a1a;
+  outline: none;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+.tw-search-pill::placeholder {
+  color: #999;
+  letter-spacing: 0.1em;
+}
+
+.tw-search-pill:focus {
+  border-color: #9e9e9e;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+
+.tw-loading-center {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+/* PC-box style storage grid: 9 square slots per row. No panel and no
+   decorative wedge behind it any more — the grid sits straight on the page,
+   so nothing overlaps or hides the "Cargar más" button underneath. */
+.tw-results-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  max-width: 1000px;
+  box-sizing: border-box;
+  background: none;
+  padding: 0;
+}
+
+/* A single box slot — the pale-pink square from the PC Box screen. Each slot
+   carries the game's little ground shadow and, on hover, the red "V" cursor
+   it parks on the selection. */
+.tw-result-tile {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Red "V" cursor, drawn with two borders rotated 45deg — exactly the marker
+   the game drops on the hovered slot. */
+.tw-result-tile::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  width: 15px;
+  height: 15px;
+  border-right: 4px solid #d4202c;
+  border-bottom: 4px solid #d4202c;
+  transform: translateX(-50%) rotate(45deg);
+  opacity: 0;
+  z-index: 3;
+  pointer-events: none;
+  transition: opacity 0.1s;
+}
+
+.tw-result-tile:hover::before { opacity: 1; }
+
+/* Ground shadow removed (display: none) */
+.tw-result-tile::after {
+  display: none;
+}
+
+/* Sprite inside the slot.
+   NOTE: for replaced elements (img) `inset` does NOT stretch the box — with
+   width/height:auto the browser keeps the intrinsic size and pins it to the
+   top-left corner. So we set an explicit size and centre it with transform. */
+.tw-result-tile img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 112%;
+  height: 112%;
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+  image-rendering: pixelated;
+  /* never steal the click from a neighbouring slot */
+  pointer-events: none;
+}
+
+/* No-match / still-loading state, reusing the SwSh notice box */
+.tw-no-results {
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  text-align: center;
+  min-width: 240px;
+  color: #fff;
+}
+
+/* "Load more" control — white capsule like the box's "Box List"/"Search" */
+.tw-load-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  color: var(--swsh-black, #1a1a1a);
+  border: none;
+  border-radius: 999px;
+  padding: 12px 30px;
+  font-family: 'FOT-UDKakugo', sans-serif;
+  font-weight: 900;
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.12);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.tw-load-more:hover {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Selected Pokémon card */
+.tw-selected-card {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0,0,0,0.35);
+  border-radius: 30px;
+  padding: 0.4rem 0.8rem 0.4rem 0.4rem;
+}
+
+.tw-card-arrow {
+  color: white;
+  font-size: 1.6rem;
+  line-height: 1;
+  margin-right: 2px;
+}
+
+.tw-selected-sprite {
+  width: 52px;
+  height: 52px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+.tw-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.tw-card-name {
+  color: white;
+  font-weight: 900;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tw-card-bar {
+  height: 6px;
+  width: 100%;
+  background: #4caf50;
+  border-radius: 3px;
+}
+
+/* Change button */
+.tw-change-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0.5rem 1.1rem;
+  font-family: 'FOT-UDKakugo', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  width: fit-content;
+  transition: background 0.15s;
+}
+
+.tw-change-btn:hover {
+  background: #f0f0f0;
+}
+
+/* Search */
+.tw-search-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  position: relative;
+}
+
+.tw-search-label {
+  color: white;
+  font-weight: 900;
+  font-size: 0.8rem;
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+.tw-search {
+  background: rgba(0,0,0,0.25);
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 6px;
+  color: white;
+  padding: 0.5rem 0.7rem;
+  font-family: 'FOT-UDKakugo', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tw-search::placeholder { color: rgba(255,255,255,0.5); }
+.tw-search:focus { border-color: white; }
+
+.tw-search-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  overflow: hidden;
+  z-index: 100;
+}
+
+.tw-search-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #eee;
+}
+
+.tw-search-item:last-child { border-bottom: none; }
+
+.tw-search-item:hover {
+  background: #cc2b35;
+  color: white;
+}
+
+.tw-search-item img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  object-fit: contain;
+}
+
+.tw-loading {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* ══════════════════════════════════════
+   RIGHT PANEL
+══════════════════════════════════════ */
+.tw-right {
+  flex: 1;
+  /* Transparent: the white→#e7ffff gradient lives on .tw-root, so the
+     diagonal red cut reads as one continuous backdrop. No watermark here. */
+  background: none;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* child handles scroll */
+}
+
+/* Scrollable content area */
+.tw-right-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem 2rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Section */
+.tw-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.tw-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  align-self: flex-start;
+  /* red band, exactly like the header of the SwSh summary card */
+  background: linear-gradient(180deg, #d22b35 0%, #bd1f29 100%);
+  color: white;
+  font-weight: 900;
+  font-size: 0.88rem;
+  padding: 0.55rem 1.3rem;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+}
+
+/* IV grid */
+.tw-iv-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  background: white;
+  border: 1px solid #e4e6ee;
+  border-radius: 14px;
+  padding: 0.7rem;
+  margin-top: 0.6rem;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+/* Summary stat row: a soft grey rounded bar, label left, value right — taken
+   straight from the SwSh summary card. */
+.tw-iv-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+  background: #f0f1f4;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.tw-iv-box:hover {
+  border-color: #b9b9b9;
+  transform: scale(1.03);
+}
+
+/* A maxed stat lights up like a highlighted row in the game's own lists. */
+.tw-iv-perfect {
+  background: linear-gradient(180deg, #f8b871 0%, #ef9a4a 100%);
+  border-color: transparent;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.10);
+}
+.tw-iv-perfect .tw-iv-label,
+.tw-iv-perfect .tw-iv-val { color: #fff; }
+
+.tw-iv-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.tw-iv-label {
+  font-weight: 900;
+  font-size: 0.85rem;
+  flex: 1;
+}
+
+.tw-iv-val {
+  font-weight: 900;
+  font-size: 0.9rem;
+  color: #555;
+  min-width: 20px;
+  text-align: right;
+}
+
+.tw-iv-perfect .tw-iv-val { color: #fff; }
+
+/* Egg groups */
+.tw-egg-group {
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.tw-egg-group-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--swsh-blue-deep, #006ec4);
+  color: white;
+  font-weight: 900;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  border-radius: 14px 14px 0 0;
+}
+
+.tw-egg-count {
+  margin-left: auto;
+  background: #e8a000;
+  color: #1a0a00;
+  padding: 2px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+/* Two-row sprite grid instead of single scroll */
+.tw-egg-sprites {
+  display: grid;
+  grid-template-rows: repeat(2, 40px);
+  grid-auto-flow: column;
+  grid-auto-columns: 38px;
+  overflow-x: auto;
+  background: #0b1a4a;
+  padding: 4px 8px;
+  gap: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: #1565c0 #0b1a4a;
+}
+
+.tw-egg-sprites::-webkit-scrollbar { height: 4px; }
+.tw-egg-sprites::-webkit-scrollbar-track { background: #0b1a4a; }
+.tw-egg-sprites::-webkit-scrollbar-thumb { background: #1565c0; border-radius: 2px; }
+
+.tw-egg-sprite {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tw-egg-sprite img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  object-fit: contain;
+}
+
+/* ── Confirm bar — SwSh black action band ── */
+.tw-confirm-bar {
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #232323 0%, #141414 100%);
+  padding: 0.6rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tw-confirm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  border: none;
+  border-radius: 999px;
+  background: var(--swsh-yellow);
+  color: #fff;
+  font-family: 'FOT-UDKakugo', sans-serif;
+  font-weight: 900;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  padding: 10px 30px;
+  cursor: pointer;
+  text-transform: uppercase;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.35);
+  transition: transform 0.1s, box-shadow 0.1s, filter 0.15s;
+}
+
+.tw-confirm-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.35);
+}

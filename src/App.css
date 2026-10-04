@@ -1,0 +1,546 @@
+:root {
+  /* ── Real in-game SwSh palette (sampled from the game UI) ── */
+  --swsh-red: #e3313d;          /* signature SwSh red            */
+  --swsh-dark-red: #c1272d;
+  --swsh-white: #f5f6fa;
+  --swsh-black: #1a1a1a;
+  --swsh-yellow: #f2a03d;       /* bag / menu accent             */
+  --swsh-gold: #f7c948;
+  --swsh-gray: #e0e0e0;
+  --swsh-charcoal: #3a3a3a;     /* notice boxes                  */
+  --swsh-orange: #ef5a3c;       /* Pokédex wedge                 */
+  --swsh-blue: #29abe2;         /* shop panel                    */
+  --swsh-green: #5cc22b;        /* HP bar                        */
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, sans-serif;
+  overflow: hidden;
+  background-color: var(--swsh-white);
+}
+
+/* === Pokemon Sword/Shield Menu Style === */
+.swsh-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* === Top Tabs (L / R) === */
+.swsh-top-tabs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  z-index: 30;
+}
+
+.swsh-bumper {
+  background-color: var(--swsh-black);
+  color: white;
+  font-weight: 900;
+  padding: 0.2rem 1rem;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.swsh-tabs-list {
+  display: flex;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.3rem;
+  border-radius: 8px;
+  gap: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.swsh-tab {
+  padding: 0.5rem 2rem;
+  font-weight: 800;
+  font-size: 1rem;
+  color: #888;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+
+.swsh-tab:hover {
+  color: var(--swsh-black);
+}
+
+.swsh-tab.active {
+  background-color: #ff9800;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.swsh-bg-red {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--swsh-red);
+  z-index: 1;
+}
+
+.swsh-bg-white {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 65%;
+  height: 100%;
+  background-color: var(--swsh-white);
+  /* The iconic diagonal cut */
+  clip-path: polygon(25% 0, 100% 0, 100% 100%, 0% 100%);
+  z-index: 2;
+  box-shadow: -10px 0 20px rgba(0,0,0,0.1);
+}
+
+.swsh-bg-white::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(224, 247, 250, 0.4) 100%);
+  z-index: 3;
+}
+
+.swsh-menu-grid {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem 4rem;
+  max-width: 900px;
+  width: 100%;
+  padding: 2rem;
+  margin-top: -5rem;
+}
+
+.swsh-menu-item-wrapper {
+  display: flex;
+  position: relative;
+  cursor: pointer;
+  justify-content: center;
+}
+
+.swsh-menu-item-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Chunky ">" cursor — art comes from the shared .swsh-cursor class */
+.swsh-menu-cursor {
+  position: absolute;
+  left: -16px;
+  top: 30px;
+  width: 32px;
+  height: 40px;
+  z-index: 20;
+  animation: swshCursorNudge 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes swshCursorNudge {
+  from { transform: translateX(-3px); }
+  to   { transform: translateX(3px); }
+}
+
+.swsh-icon-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: white;
+  border: 4px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: all 0.1s ease;
+}
+
+.swsh-icon-circle.active {
+  background-color: var(--swsh-black);
+  border-width: 6px;
+  transform: scale(1.1);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+.swsh-menu-label {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+}
+
+.swsh-menu-item-wrapper:nth-child(n+3) .swsh-menu-label {
+  color: var(--swsh-black);
+  text-shadow: none;
+}
+
+/* Selected item name plate — black pill + diagonal coloured tag */
+.swsh-menu-plate {
+  position: absolute;
+  left: 50%;
+  bottom: 10.5rem;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: stretch;
+  background: var(--swsh-black);
+  color: #fff;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+.swsh-menu-plate__name {
+  padding: 9px 30px 9px 26px;
+  font-weight: 900;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+}
+.swsh-menu-plate__tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 22px 0 26px;
+  font-weight: 900;
+  font-size: 1.2rem;
+  color: #fff;
+  clip-path: polygon(16px 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Info box = positioning wrapper; the SwSh "notice" look comes from .swsh-notice */
+.swsh-info-box {
+  position: absolute;
+  bottom: 5.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: min(620px, 80vw);
+  text-align: center;
+}
+
+/* Bottom band = positioning wrapper; visuals come from .swsh-action-bar */
+.swsh-bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 20;
+}
+
+/* Back button on the planner page (uses the shared .swsh-btn look) */
+.planner-back-btn {
+  position: absolute;
+  top: 104px;
+  left: 20px;
+  z-index: 10;
+}
+
+/* === Planner Page Overrides to match theme slightly === */
+.planner-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--swsh-white);
+  color: var(--swsh-black);
+  position: relative;
+  overflow: hidden;
+}
+
+.planner-bg-red {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 380px;
+  height: 100%;
+  background-color: var(--swsh-red);
+  z-index: 0;
+}
+
+.planner-header {
+  position: relative;
+  z-index: 10;
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: white;
+  color: var(--swsh-black);
+  border: 4px solid var(--swsh-black);
+  padding: 0.3rem 1.5rem;
+  border-radius: 40px;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+  transition: transform 0.1s;
+}
+
+.back-btn:active {
+  transform: translateY(4px);
+  box-shadow: none;
+}
+
+.planner-header-title h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--swsh-black);
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.planner-content {
+  display: flex;
+  flex: 1;
+  position: relative;
+  z-index: 5;
+  padding: 0 2rem 2rem 2rem;
+  gap: 2rem;
+}
+
+.planner-left-panel {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+/* Custom scrollbar for left panel */
+.planner-left-panel::-webkit-scrollbar {
+  width: 8px;
+}
+.planner-left-panel::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 10px;
+}
+
+.planner-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title {
+  color: white;
+  background-color: var(--swsh-black);
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+  display: inline-block;
+  align-self: flex-start;
+  font-weight: 900;
+  font-size: 1rem;
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.planner-right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: 4px solid var(--swsh-gray);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.planner-tree-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.tree-container {
+  flex: 1;
+  min-height: 0;
+}
+
+.placeholder {
+  color: #aaa;
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+
+.generate-btn {
+  background-color: var(--swsh-black);
+  color: var(--swsh-yellow);
+  border: none;
+  padding: 1.2rem;
+  font-weight: 900;
+  font-size: 1.2rem;
+  border-radius: 40px;
+  cursor: pointer;
+  margin-top: 1rem;
+  text-transform: uppercase;
+  transition: transform 0.1s, box-shadow 0.1s;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+}
+
+.generate-btn:hover:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+}
+
+.generate-btn:disabled {
+  background-color: var(--swsh-gray);
+  color: white;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.pokemon-card {
+  background-color: white;
+  border: 2px solid var(--swsh-gray);
+  border-radius: 40px; /* Sw/Sh party style */
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  position: relative;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.pokemon-card:hover {
+  background-color: var(--swsh-black);
+  color: white;
+  transform: translateX(4px);
+}
+
+.pokemon-card.used {
+  background-color: #f0f0f0;
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.card-sprite-container {
+  position: relative;
+  width: 68px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.pokeball-floor {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%) scaleY(0.4);
+  width: 80px;
+  height: 80px;
+  color: rgba(0, 0, 0, 0.3); /* Much more visible now */
+  z-index: -1;
+}
+
+.pokemon-card:hover .pokeball-floor {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.pokemon-card.used .pokeball-floor {
+  color: rgba(0, 0, 0, 0.1);
+}
+
+.card-sprite {
+  width: 60px;
+  height: 56px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  z-index: 2;
+  position: relative;
+}
+
+.card-details {
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+.card-header {
+  font-weight: 800;
+  display: flex;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.pokemon-card:hover .card-header {
+  color: white;
+}
+
+.card-ivs {
+  display: flex;
+  gap: 0.3rem;
+  font-family: monospace;
+  margin-top: 0.4rem;
+}
+
+.iv-badge {
+  background: var(--swsh-white);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  border: 1px solid var(--swsh-gray);
+  color: #666;
+}
+
+.iv-badge.perfect {
+  color: #2e7d32;
+  border-color: #4caf50;
+  background: #e8f5e9;
+  font-weight: bold;
+}
+
+.error-banner {
+  background-color: #ffebee;
+  border-left: 4px solid var(--swsh-red);
+  color: var(--swsh-dark-red);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.summary {
+  display: flex;
+  gap: 1rem;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  border: 1px solid #4caf50;
+}
