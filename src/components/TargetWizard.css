@@ -27,9 +27,10 @@
   /* SwSh panel red: a vivid red lit from the top-left, washed by a broad
      glossy sheen sweeping across the corner — the same language the game uses
      on its summary / Pokédex / bag panels. */
-  /* Flat SwSh panel red. The reference keeps this surface perfectly flat —
-     no glossy sheen, no light shafts: just the game's own ambient shading. */
-  background: #c42430;
+  /* SwSh summary-panel red. Sampled off the move-list screen: a bright,
+     saturated red (not a muted brick) that reads as the game's own brand
+     colour on the summary / move-select panels. */
+  background: #e33440;
   clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
   padding: 2rem 3.5rem 2rem 1.8rem;
   display: flex;
@@ -39,15 +40,18 @@
 }
 
 /* Deeper red wedge hugging the diagonal cut — the game's two-tone menu panel.
-   A crisp, solid band like the reference: only the inner edge is feathered a
-   touch so the seam does not alias, and its edges stay parallel to the
-   panel's clip-path (100% -> 88%). */
+   A crisp, solid band like the reference: the gradient starts BEFORE the
+   clip so the feathered inner edge lands inside the visible band (otherwise
+   the band is almost entirely clipped away and reads as a faint tint), and
+   both of its edges stay parallel to the panel's own clip (100% -> 88%).
+   Colour is a deep carmine — still unmistakably red, not the near-black
+   maroon it used to be. */
 .tw-left::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(100deg, rgba(148, 22, 33, 0) 72%, #961621 79%, #8d141e 100%);
-  clip-path: polygon(72% 0, 100% 0, 88% 100%, 60% 100%);
+  background: linear-gradient(100deg, rgba(176, 20, 38, 0) 76%, #b41426 86%, #a81020 100%);
+  clip-path: polygon(80% 0, 100% 0, 88% 100%, 68% 100%);
   z-index: 0;
 }
 
